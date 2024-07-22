@@ -13,13 +13,22 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/2020WB86391/Upgrade.git'
             }
         }
+        stage('Install Dependencies') {
+            steps {
+                // Install Ansible and other dependencies
+                sh '''
+                sudo apt update
+                sudo apt install -y ansible
+                '''
+            }
+        }
         stage('Run Ansible Playbook') {
             steps {
                 // Run the Ansible playbook to upgrade Ubuntu OS
                 ansiblePlaybook(
-                    colorized: true,
                     playbook: 'upgrade.yml',
-                    inventory: 'hosts'
+                    inventory: 'hosts',
+                    colorized: true
                 )
             }
         }
